@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+    <title>Document</title>
+    <style>
+        input,textarea {
+            width:75vw;
+            border-radius:5px;
+            overflow:auto;
+            
+        }
+    </style>
+</head>
+<body style="margin-left:2vw">
+    <h1>New Article</h1>
+    <div style="color:gray;size:16px">
+        <form action="/" method="post" class="form-control" style="width:min-content">
+            <label required for="title">Title</label><br>
+            <input required type="text" id="title" name="title"><br><br>
+            <label for="description">Description</label><br>
+            <textarea rows=3 id="description" name="description"></textarea><br><br>
+            <label for="markdown">Markdown</label><br>
+            <textarea required rows=6 id="markdown" name="markdown"></textarea><br><br>
+            <button  type="submit" class="btn btn-primary">Submit</button>
+          </form> 
+        <div style="margin-top:3vh">
+   
+    </div>
+    </div>
+</body>
+</html>
