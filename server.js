@@ -32,9 +32,23 @@ app.get('/deleteAll',(req,res)=>{
 
 app.delete('/:id', (req, res) => {
     Articles.findByIdAndDelete(req.params.id).then(()=>{res.redirect('/')})
+    Articles.find
     });
 
+app.get('/edit/:id',(req,res)=>{
+    Articles.findById(req.params.id).then(article=>{
+        res.render('edit',{article:article})
+    })
 
+
+})
+
+app.put('/:id',(req,res)=>{
+    let id=req.params.id;
+   Articles.findByIdAndUpdate(id,
+    {title:req.body.title, description:req.body.description, date: Date.now(), markdown:req.body.markdown})
+    .then(()=>{res.redirect(`/show/${id}`)}).catch(err=>{console.log(err)})
+})
 
 app.get('/newArticle',(req,res)=>{
     res.render('newArticle',{article: new Articles()})

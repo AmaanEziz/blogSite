@@ -21,8 +21,8 @@
             <div style="color:grey"><%=article.date%></div>
             <div style="height:2em;overflow:hidden"><%=article.description%></div>
             <a href="/show/<%=article.id%>"><button  class="btn btn-primary">Read More</button></a>
-            <button class="btn btn-info">Edit</button>
-            <form method="post" action="/<%=article.id%>?_method=DELETE">
+            <a href="/edit/<%=article.id%>"><button class="btn btn-info">Edit</button></a>
+            <form method="post" action="/<%=article.id%>?_method=DELETE" className="float-left">
             <button class="btn btn-danger" id="deleteButton">Delete</button>
             </form>
              </div>
