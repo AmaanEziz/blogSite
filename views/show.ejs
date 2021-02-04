@@ -9,7 +9,10 @@
 <body class="m-3">
     <h1><%=article.title%></h1>
     <div>Last Edited <%=article.date%></div><br>
+    <div class="mt-3">
+        <a href="/" class="btn btn-secondary">Back to Homepage</a>
+        <a href="/edit/<%=article.id%>" class="btn btn-info">Edit</a>
+        </div>
     <div><%=article.markdown%></div>
-    <a href="/" class="btn btn-info mt-3">Back to Homepage</a>
 </body>
 </html>
