@@ -15,6 +15,7 @@
     "ejs": "^2.6.1",
     "export": "^0.1.337",
     "express": "^4.17.1",
+    "method-override": "^3.0.0",
     "mongoose": "^5.11.14",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.6",

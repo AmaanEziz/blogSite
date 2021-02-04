@@ -3,36 +3,65 @@ const app= express()
 const mongoose=require('mongoose')
 const Articles=require('./Models/article.js')
 const bodyParser = require("body-parser");
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
 
 app.set('view engine','ejs')
 app.listen(8080)
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/blog', {
   useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true
 })
 
-articles=[]
-app.get('/',(req,res)=>{
-    res.render('index',{articles: articles})
-})
-app.get('/newArticle',(req,res)=>{
-    res.render('newArticle')
-})
-app.post('/', async(req,res)=>{
 
-    const article= new Articles({
+
+app.get('/',(req,res)=>{
+    Articles.find({}).then(articlesDB=>{
+        const articles=articlesDB.map(m=>m);
+        res.render('index',{articles:articles})
+    })
+    
+})
+
+app.get('/deleteAll',(req,res)=>{
+    Articles.deleteMany({}).then(()=>{res.redirect('/')})
+})
+
+app.delete('/:id', (req, res) => {
+    Articles.findByIdAndDelete(req.params.id).then(()=>{res.redirect('/')})
+    });
+
+
+
+app.get('/newArticle',(req,res)=>{
+    res.render('newArticle',{article: new Articles()})
+})
+app.get('/show/:id',(req,res)=>{
+    let id=req.params.id
+Articles.findById(id).then(article=>{
+    res.render('show',{article:article})
+})
+
+})
+
+app.post('/', (req,res)=>{
+
+    let article= new Articles({
         title: req.body.title,
         description:req.body.description,
         markdown:req.body.markdown,
         date: req.body.date
     })
     try {
-        article=await article.save();//This saves the data to the database
-        res.redirect(`/${article.id}`)
+       article.save().then((savedArticle)=>{
+        res.redirect(`/show/${savedArticle.id}`)
+       }).catch((err)=>{console.log(err)})
     }
-    catch(e){
-        res.render('/newArticle')
+    catch(error){
+        console.log(error)
     }
+
 })

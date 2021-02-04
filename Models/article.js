@@ -12,18 +12,13 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  createdAt: {
+  date: {
     type: Date,
     default: Date.now
   },
   slug: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  sanitizedHtml: {
-    type: String,
-    required: true
+    type:Date,
+    default:Date.now
   }
 })
 

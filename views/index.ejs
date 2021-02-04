@@ -7,21 +7,24 @@
     <title>Responsive Blog</title>
 </head>
 
+
 <body>
    <div class="container">
+      
     <h1>Blog Articles</h1>
     <a class="btn btn-success" href="/newArticle">New Article</a>
-    <% articles.map(article=>{%>
+    <a href="/deleteAll" class="btn btn-danger float-right">Delete All Blogs</a>
+    <% articles.forEach(article=>{%>
         <div class="border black mt-2" >
             <div class="m-3">
             <h3><%=article.title%></h3>
             <div style="color:grey"><%=article.date%></div>
             <div style="height:2em;overflow:hidden"><%=article.description%></div>
-            <button  class="btn btn-primary">Read More</button>
+            <a href="/show/<%=article.id%>"><button  class="btn btn-primary">Read More</button></a>
             <button class="btn btn-info">Edit</button>
-            
-            <button class="btn btn-danger">Delete</button>
-        
+            <form method="post" action="/<%=article.id%>?_method=DELETE">
+            <button class="btn btn-danger" id="deleteButton">Delete</button>
+            </form>
              </div>
              
             
@@ -32,3 +35,6 @@
    </div>
 </body>
 </html>
+
+
+        
