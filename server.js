@@ -2,6 +2,8 @@ const express= require("express")
 const app= express()
 const mongoose=require('mongoose')
 const Articles=require('./Models/article.js')
+const Users=require('./Models/users.js')
+
 const bodyParser = require("body-parser");
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
@@ -16,9 +18,19 @@ mongoose.connect('mongodb://localhost/blog', {
   useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true
 })
 
-
-
 app.get('/',(req,res)=>{
+    Users.findOne({isLoggedIn:true},(err,result)=>{
+        if (err){console.log(err)}
+        if (!result){res.redirect('/login')}
+        else{
+        res.redirect('/homepage')}
+    })
+})
+
+app.get('/login',(req,res)=>{
+    res.render('login')
+})
+app.get('/homepage',(req,res)=>{
     Articles.find({}).then(articlesDB=>{
         const articles=articlesDB.map(m=>m);
         res.render('index',{articles:articles})
@@ -26,12 +38,41 @@ app.get('/',(req,res)=>{
     
 })
 
+app.get('/register',(req,res)=>{
+    res.render('register',{userError:"",passwordError:""})
+})
+app.post('/createAccount',(req,res)=>{
+    if(req.body.newPassword!=req.body.confirmPassword){
+        res.render('register',{userError:"",passwordError:"Please confirm password"})
+        return
+    }
+    Users.findOne({username:req.body.newUsername},(err,result)=>{
+        if(result){
+            res.render('register',{userError:"Username already in use",passwordError:""})
+            return;
+        }
+    }) 
+    let newUser= new Users({
+        username:req.body.newUsername,
+        password:req.body.newPassword,
+        isLoggedIn:true
+    })
+    newUser.save().then(()=>{
+        console.log(Users)
+        res.send(Users)
+    })
+})
 app.get('/deleteAll',(req,res)=>{
     Articles.deleteMany({}).then(()=>{res.redirect('/')})
 })
+app.get('/logOut',(req,res)=>{
+    Users.findOneAndUpdate({isLoggedIn:true},{isLoggedIn:false}).then(()=>{
+        Users.find({},(err,result)=>{console.log(result)})
+        res.redirect('/')})
 
-app.delete('/:id', (req, res) => {
-    Articles.findByIdAndDelete(req.params.id).then(()=>{res.redirect('/')})
+})
+app.delete('/homepage/:id', (req, res) => {
+    Articles.findByIdAndDelete(req.params.id).then(()=>{res.redirect('/homepage')})
     Articles.find
     });
 
@@ -43,7 +84,7 @@ app.get('/edit/:id',(req,res)=>{
 
 })
 
-app.put('/:id',(req,res)=>{
+app.put('/homepage/:id',(req,res)=>{
     let id=req.params.id;
    Articles.findByIdAndUpdate(id,
     {title:req.body.title, description:req.body.description, date: Date.now(), markdown:req.body.markdown})
@@ -61,7 +102,7 @@ Articles.findById(id).then(article=>{
 
 })
 
-app.post('/', (req,res)=>{
+app.post('/homepage/', (req,res)=>{
 
     let article= new Articles({
         title: req.body.title,

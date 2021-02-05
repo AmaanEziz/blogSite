@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body class="container">
+
+    <h1 class="d-flex justify-content-center" >Create New Account</h1>
+
+    <form  action="/createAccount" method="POST" class="form-control" style="  text-align: center">
+           
+            <label>New Username</label><br>
+            <input type="text" id="newUsername" name="newUsername"><br>
+            <div style="color:red"><%=userError %></div>
+            <label>New Password</label><br>
+            <input type="password" id="newPassword" name="newPassword"><br>
+            <div style="color:red"><%=passwordError %></div>
+            <label>Confirm Password</label><br>
+            <input type="password" id="confirmPassword" name="confirmPassword"><br><br>
+            <button type="submit" class="btn btn-primary" >Register and Login</button><br>
+    </form>
+
+</body>
+</html>

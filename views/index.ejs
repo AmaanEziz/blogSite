@@ -14,6 +14,7 @@
     <h1>Blog Articles</h1>
     <a class="btn btn-success" href="/newArticle">New Article</a>
     <a href="/deleteAll" class="btn btn-danger float-right">Delete All Blogs</a>
+    <a href="/logOut" class="btn btn-info float-right">Logout</a>
     <% articles.forEach(article=>{%>
         <div class="border black mt-2" >
             <div class="m-3">
@@ -24,7 +25,7 @@
             <a href="/show/<%=article.id%>"><button  class="btn btn-primary">Read More</button></a>
             <a href="/edit/<%=article.id%>"><button class="btn btn-info">Edit</button></a>
             
-            <form method="post" action="/<%=article.id%>?_method=DELETE" className="float-left" style="display:inline">
+            <form method="post" action="/homepage/<%=article.id%>?_method=DELETE" className="float-left" style="display:inline">
                 <button class="btn btn-danger" id="deleteButton">Delete</button>
             </form>
          

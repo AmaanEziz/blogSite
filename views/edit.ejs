@@ -18,7 +18,7 @@
 <body style="margin-left:2vw">
     <h1>Edit Article</h1>
     <div style="color:gray;size:16px">
-        <form method="POST" action="/<%=article.id%>?_method=PUT"  class="form-control" style="width:min-content">
+        <form method="POST" action="/homepage/<%=article.id%>?_method=PUT"  class="form-control" style="width:min-content">
             <label required for="title">Title</label><br>
             <input required type="text" value="<%=article.title %>" id="title" name="title" ><br><br>
             <label for="description">Description</label><br>
