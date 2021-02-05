@@ -101,13 +101,34 @@ app.put('/homepage/:id',(req,res)=>{
 app.get('/newArticle',(req,res)=>{
     res.render('newArticle',{article: new Articles()})
 })
+
 app.get('/show/:id',(req,res)=>{
     let id=req.params.id
 Articles.findById(id).then(article=>{
     res.render('show',{article:article})
 })
+})
+
+app.post('/show/:id',(req,res)=>{
+    
+Users.findOne({isLoggedIn:true}).then( (user)=>{
+    let id=req.params.id
+Articles.findByIdAndUpdate(id,
+     {"$push": { comments: req.body.newComment } },
+     {"$push": { authorAtComment: user.username } },
+
+                
+).then(article=>{
+    console.log(article.comments);
+    res.redirect(`/show/${article.id}`)})
+
+}).catch(err=>{console.log(err)})
 
 })
+
+
+
+
 
 app.post('/homepage/', async (req,res)=>{
 
@@ -118,10 +139,7 @@ app.post('/homepage/', async (req,res)=>{
         date: req.body.date
     })
    await Users.findOne({isLoggedIn:true},(err,result)=>{
-        console.log(`article.author before assignment is  ${article.author}`)
         article.author=result.username;
-        console.log(`article.author is  ${article.author}`)
-        console.log(`result.username is  ${result.username}`)
 
     })
     try {

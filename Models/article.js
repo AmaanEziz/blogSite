@@ -20,6 +20,14 @@ const articleSchema = new mongoose.Schema({
     type:String,
     default:"Anonymous"
   },
+  comments:{
+    type:[String],
+    default:[]
+  },
+  authorAtComment:{
+    type:[String],
+    default:[]
+  },
   slug: {
     type:Date,
     default:Date.now
@@ -27,4 +35,4 @@ const articleSchema = new mongoose.Schema({
 })
 
 
-module.exports = mongoose.model('Articles',articleSchema)
+module.exports = mongoose.model('articles',articleSchema)
