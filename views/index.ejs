@@ -19,7 +19,8 @@
         <div class="border black mt-2" >
             <div class="m-3">
             <h3><%=article.title%></h3>
-            <div style="color:grey">Last Edited <%=article.date%></div>
+            <div style="color:grey">Created by <%=article.author%> at <%=article.date%></div>
+
             <div style="max-height:3em;height:fit-content;overflow:hidden"><%=article.description%></div>
             
             <a href="/show/<%=article.id%>"><button  class="btn btn-primary">Read More</button></a>

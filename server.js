@@ -58,13 +58,6 @@ app.post('/createAccount',(req,res)=>{
         res.render('register',{userError:"",passwordError:"Please confirm password"})
         return
     }
- /*   Users.findOne({username:req.body.newUsername},(err,result)=>{
-        if(result){
-            res.render('register',{userError:"Username already in use",passwordError:""})
-            return;
-        }
-    }) */
-    
     let newUser= new Users({
         username:req.body.newUsername,
         password:req.body.newPassword,
@@ -116,13 +109,20 @@ Articles.findById(id).then(article=>{
 
 })
 
-app.post('/homepage/', (req,res)=>{
+app.post('/homepage/', async (req,res)=>{
 
     let article= new Articles({
         title: req.body.title,
         description:req.body.description,
         markdown:req.body.markdown,
         date: req.body.date
+    })
+   await Users.findOne({isLoggedIn:true},(err,result)=>{
+        console.log(`article.author before assignment is  ${article.author}`)
+        article.author=result.username;
+        console.log(`article.author is  ${article.author}`)
+        console.log(`result.username is  ${result.username}`)
+
     })
     try {
        article.save().then((savedArticle)=>{
