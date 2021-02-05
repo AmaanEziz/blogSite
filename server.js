@@ -27,8 +27,20 @@ app.get('/',(req,res)=>{
     })
 })
 
+app.post('/',(req,res)=>{
+    Users.findOne({username:req.body.username,password:req.body.password},(err,result)=>{
+        if(!result){
+            res.render('login',{cantFindAccount:"Account associated with username and password not found, please try again"})
+            return;
+        }
+    })
+    Users.findOneAndUpdate({username:req.body.username},{isLoggedIn:true}).then((data)=>{
+        res.redirect('/')
+    })
+})
+
 app.get('/login',(req,res)=>{
-    res.render('login')
+    res.render('login',{cantFindAccount:""})
 })
 app.get('/homepage',(req,res)=>{
     Articles.find({}).then(articlesDB=>{
