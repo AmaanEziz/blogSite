@@ -70,8 +70,8 @@ app.post('/createAccount',(req,res)=>{
         isLoggedIn:true
     })
     newUser.save().then(()=>{
-        console.log(Users)
-        res.send(Users)
+     
+        res.redirect('/')
     })
 })
 app.get('/deleteAll',(req,res)=>{
@@ -79,7 +79,6 @@ app.get('/deleteAll',(req,res)=>{
 })
 app.get('/logOut',(req,res)=>{
     Users.findOneAndUpdate({isLoggedIn:true},{isLoggedIn:false}).then(()=>{
-        Users.find({},(err,result)=>{console.log(result)})
         res.redirect('/')})
 
 })
