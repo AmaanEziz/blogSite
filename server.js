@@ -58,12 +58,13 @@ app.post('/createAccount',(req,res)=>{
         res.render('register',{userError:"",passwordError:"Please confirm password"})
         return
     }
-    Users.findOne({username:req.body.newUsername},(err,result)=>{
+ /*   Users.findOne({username:req.body.newUsername},(err,result)=>{
         if(result){
             res.render('register',{userError:"Username already in use",passwordError:""})
             return;
         }
-    }) 
+    }) */
+    
     let newUser= new Users({
         username:req.body.newUsername,
         password:req.body.newPassword,
@@ -72,6 +73,8 @@ app.post('/createAccount',(req,res)=>{
     newUser.save().then(()=>{
      
         res.redirect('/')
+    }).catch(err=>{
+        res.render('register',{userError:"Username already in use",passwordError:""})
     })
 })
 app.get('/deleteAll',(req,res)=>{
