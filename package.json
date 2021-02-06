@@ -10,6 +10,7 @@
   "author": "Group 5 (S7)",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.6.0",
     "ejs": "^2.6.1",

@@ -17,11 +17,17 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/blog', {
   useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true
 })
+async function deleteAllData(){
+await Articles.deleteMany({})
+await Users.deleteMany({})
+}
+
+
+
 
 app.get('/',(req,res)=>{
     Users.findOne({isLoggedIn:true},(err,result)=>{
-        if (err){console.log(err)}
-        if (!result){res.redirect('/login')}
+        if (err || !result){res.redirect('/login')}
         else{
         res.redirect('/homepage')}
     })
@@ -43,10 +49,14 @@ app.get('/login',(req,res)=>{
     res.render('login',{cantFindAccount:""})
 })
 app.get('/homepage',(req,res)=>{
+    
     Articles.find({}).then(articlesDB=>{
         const articles=articlesDB.map(m=>m);
-        res.render('index',{articles:articles})
-    })
+        Users.findOne({isLoggedIn:true},(err,result)=>{
+            res.render('index',{articles:articles,username:result.username})
+        }).catch(err=>{res.redirect('/login')})
+    }).catch(err=>{res.redirect('/login')})
+    
     
 })
 
@@ -114,12 +124,10 @@ app.post('/show/:id',(req,res)=>{
 Users.findOne({isLoggedIn:true}).then( (user)=>{
     let id=req.params.id
 Articles.findByIdAndUpdate(id,
-     {"$push": { comments: req.body.newComment } },
-     {"$push": { authorAtComment: user.username } },
-
-                
+     {"$push": {authorAtComment: user.username,comments:req.body.newComment}}
+             
 ).then(article=>{
-    console.log(article.comments);
+    
     res.redirect(`/show/${article.id}`)})
 
 }).catch(err=>{console.log(err)})
