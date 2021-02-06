@@ -15,7 +15,7 @@ New Article:
 <img src="./Photos/newArticle.PNG"><br><br>
 
 Required New Article Fields:
-<img src="./Photos/RequiredFields.PNG"><br><br>
+<img src="./Photos/requiredFields.PNG"><br><br>
 
 Edit Article:
 <img src="./Photos/edit.PNG"><br><br>
