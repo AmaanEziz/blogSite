@@ -21,6 +21,9 @@ mongoose.connect('mongodb://localhost/blog', {
 mongoose.set('useFindAndModify', false);
 async function deleteAllArticles(){
 await Articles.deleteMany({})
+await Users.deleteMany({})
+console.log(await Articles.find({}))
+console.log(await Users.find({}))
 }
 
 app.get('/test',(req,res)=>{
@@ -154,7 +157,10 @@ app.post('/homepage/', async (req,res)=>{
     try {
        article.save().then((savedArticle)=>{
         res.redirect(`/show/${savedArticle.id}`)
-       }).catch((err)=>{console.log(err)})
+        Articles.find({}).then((result)=>{console.log(result)})
+        Users.find({}).then((result)=>{console.log(result)})
+
+       }).catch((err)=>{console.log("save error")})
     }
     catch(error){
         console.log(error)
@@ -169,14 +175,8 @@ let user=await Users.findOne({isLoggedIn:true})
 if (!article.likedBy.includes(user.username)){
     await Articles.findByIdAndUpdate(id,{$push:{likedBy:user.username}})
 }
+else{
+    Articles.findByIdAndUpdate(id,{$pull:{likedBy:user.username}})
+}
     res.redirect('/')
 })
-app.get('/UnlikeArticle/:id', async(req,res)=>{
-    let id=req.params.id
-    let article=await Articles.findById(id)
-    let user=await Users.findOne({isLoggedIn:true})
-    if (article.likedBy.includes(user.username)){
-      await  Articles.findByIdAndUpdate(id,{$pull:{likedBy:user.username}})
-    }
-    res.redirect('/')
-    })

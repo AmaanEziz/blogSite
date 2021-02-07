@@ -31,7 +31,7 @@ const articleSchema = new mongoose.Schema({
   likedBy:{
     type:[String],
     default:[],
-    unique:true
+    unique:false
   },
   slug: {
     type:Date,
