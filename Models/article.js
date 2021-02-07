@@ -28,6 +28,11 @@ const articleSchema = new mongoose.Schema({
     type:[String],
     default:[]
   },
+  likedBy:{
+    type:[String],
+    default:[],
+    unique:true
+  },
   slug: {
     type:Date,
     default:Date.now

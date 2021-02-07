@@ -1,3 +1,4 @@
+const path = require("path")
 const express= require("express")
 const app= express()
 const mongoose=require('mongoose')
@@ -17,13 +18,13 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/blog', {
   useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true
 })
-async function deleteAllData(){
+mongoose.set('useFindAndModify', false);
+async function deleteAllArticles(){
 await Articles.deleteMany({})
-await Users.deleteMany({})
 }
 
-
-
+app.get('/test',(req,res)=>{
+    res.sendFile(path.join(__dirname, "reactviews/src", "index.html"));})
 
 app.get('/',(req,res)=>{
     Users.findOne({isLoggedIn:true},(err,result)=>{
@@ -160,3 +161,22 @@ app.post('/homepage/', async (req,res)=>{
     }
 
 })
+
+app.get('/likeArticle/:id', async(req,res)=>{
+let id=req.params.id
+let article=await Articles.findById(id)
+let user=await Users.findOne({isLoggedIn:true})
+if (!article.likedBy.includes(user.username)){
+    await Articles.findByIdAndUpdate(id,{$push:{likedBy:user.username}})
+}
+    res.redirect('/')
+})
+app.get('/UnlikeArticle/:id', async(req,res)=>{
+    let id=req.params.id
+    let article=await Articles.findById(id)
+    let user=await Users.findOne({isLoggedIn:true})
+    if (article.likedBy.includes(user.username)){
+      await  Articles.findByIdAndUpdate(id,{$pull:{likedBy:user.username}})
+    }
+    res.redirect('/')
+    })

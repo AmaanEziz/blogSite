@@ -22,7 +22,10 @@
             <div class="m-3">
             
             <h3 class="d-inline"><%=article.title%></h3>
-            
+             <a href="/likeArticle/<%=article._id%>" class="btn btn-success">Like</a>
+             <a href="/UnlikeArticle/<%=article._id%>" class="btn btn-danger">Unlike</a>
+
+             <span>Liked by <%=article.likedBy.length%> users</span>
             <div style="color:grey">Created by <%=article.author%> at <%=article.date%></div>
 
             <div style="max-height:3em;height:fit-content;overflow:hidden"><%=article.description%></div>
