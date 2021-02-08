@@ -56,8 +56,8 @@ app.get('/homepage',(req,res)=>{
     
     Articles.find({}).then(articlesDB=>{
         const articles=articlesDB.map(m=>m);
-        Users.findOne({isLoggedIn:true},(err,result)=>{
-            res.render('index',{articles:articles,username:result.username})
+        Users.findOne({isLoggedIn:true},(err,user)=>{
+            res.render('index',{articles:articles,user:user})
         }).catch(err=>{res.redirect('/login')})
     }).catch(err=>{res.redirect('/login')})
     
@@ -116,11 +116,11 @@ app.get('/newArticle',(req,res)=>{
     res.render('newArticle',{article: new Articles()})
 })
 
-app.get('/show/:id',(req,res)=>{
+app.get('/show/:id',async (req,res)=>{
     let id=req.params.id
-Articles.findById(id).then(article=>{
-    res.render('show',{article:article})
-})
+    let article=await Articles.findById(id)
+    let user= await Users.findOne({isLoggedIn:true})
+    res.render('show',{article:article,user:user})
 })
 
 app.post('/show/:id',(req,res)=>{
@@ -157,8 +157,6 @@ app.post('/homepage/', async (req,res)=>{
     try {
        article.save().then((savedArticle)=>{
         res.redirect(`/show/${savedArticle.id}`)
-        Articles.find({}).then((result)=>{console.log(result)})
-        Users.find({}).then((result)=>{console.log(result)})
 
        }).catch((err)=>{console.log("save error")})
     }
@@ -174,9 +172,32 @@ let article=await Articles.findById(id)
 let user=await Users.findOne({isLoggedIn:true})
 if (!article.likedBy.includes(user.username)){
     await Articles.findByIdAndUpdate(id,{$push:{likedBy:user.username}})
+    
 }
 else{
-    Articles.findByIdAndUpdate(id,{$pull:{likedBy:user.username}})
+   await Articles.findByIdAndUpdate(id,{$pull:{likedBy:user.username}})
+ 
 }
-    res.redirect('/')
+    res.redirect(`/show/${id}`)
+})
+
+app.get('/follow/:id/:author/:username',async (req,res)=>{
+    let author=req.params.author
+    let user=await Users.findOne({isLoggedIn:true})
+  if (!user.following.includes(author)){
+     
+    await Users.findOneAndUpdate({isLoggedIn:true},{$push:{following:author}},{new:true})
+    
+    await Users.findOneAndUpdate({username:author},{$push:{followers:user.username}},{new:true})
+            
+  }
+  else{
+    
+    await Users.findOneAndUpdate({isLoggedIn:true},{$pull:{following:author}},{new:true})
+    
+    await Users.findOneAndUpdate({username:author},{$pull:{followers:user.username}},{new:true})
+
+  }
+   
+    res.redirect(`/show/${req.params.id}`)
 })
