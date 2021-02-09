@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body class="m-3">
+    <a href="/homepage/" class="btn btn-secondary">Back to Homepage</a>
+    <% if(article.author==user.username){%>
+        <a href="/editArticle/<%=article.id%>"><button class="btn btn-info">Edit</button></a>
+      
+        <form method="post" action="/homepage/<%=article.id%>?_method=DELETE" className="float-left" style="display:inline">
+            <button class="btn btn-danger" id="deleteButton">Delete</button>
+        </form>
+    <%}else{%>
+
+        <%if (!user.following.includes(article.author)){%>
+        <a href="/follow/<%=article.id%>/<%=article.author%>/<%=user.username%>"><button class="btn btn-info">Follow User</button></a>
+        <%} else {%>
+            <a href="/follow/<%=article.id%>/<%=article.author%>/<%=user.username%>"><button class="btn btn-info">Following <span>&#10003;</span></button></a>
+        <%}%>
+
+
+
+        <%}%>
+    <%if (!article.likedBy.includes(user.username)){%>
+        <a href="/likeArticle/<%=article._id%>" class='btn btn-success'>Like</a>
+        <% } else {%>
+           <a href="/likeArticle/<%=article._id%>" class='btn btn-success'>Liked<span>&#10003;</span> </a>
+        <%}%>
+    <h1><%=article.title%></h1>
+    <div>Last Edited <%=article.date%> by <%=article.author%></div>
+  
+    <div><%=article.markdown%></div>
+    <hr>
+    <h3>Comments</h3>
+    <form action="/showArticle/<%=article.id%>" method="POST">
+        <textarea id="newComment" name="newComment"></textarea>
+        <button class="btn btn-primary" type="submit">Post Comment</button>
+    </form>
+
+    <% article.comments.forEach((comment,index)=>{%>
+    <div className="border-2">
+        <div style="font-weight:700"><%=article.authorAtComment[index]%></span></div>
+        <div className="border-2"><%=comment%></div>
+        <hr>
+    </div>
+    <%})%>
+</body>
+</html>

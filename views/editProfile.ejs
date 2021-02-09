@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=user.username%>'s Profile</title>
+</head>
+<body>
+<div style="float:left">
+<img src="<%=user.photoURL%>" width=100 height=100 style="display:inline-block">
+<h2 style="display:inline-block"><%=user.username%>'s Profile</h2>
+    <form action="/submitProfile" method="post">
+    <label for="photoURL">Change Photo</label><br>
+    <input type="file" name="photoURl" id="photoURL" accept=".jpg, .jpeg, .png"><br>
+    <label for="Bio">Change Bio</label><br>
+    <textarea name="Bio" id="Bio" value="<%=user.Bio%>"></textarea><br>
+    <button>Submit Changes</button>
+    </form>
+</div>
+<div style="position:relative;left:30vw;">
+<%-include('_articlesList')%>
+</div>
+</body>
+</html>

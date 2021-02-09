@@ -57,7 +57,7 @@ app.get('/homepage',(req,res)=>{
     Articles.find({}).then(articlesDB=>{
         const articles=articlesDB.map(m=>m);
         Users.findOne({isLoggedIn:true},(err,user)=>{
-            res.render('index',{articles:articles,user:user})
+            res.render('homepage',{articles:articles,user:user})
         }).catch(err=>{res.redirect('/login')})
     }).catch(err=>{res.redirect('/login')})
     
@@ -97,9 +97,9 @@ app.delete('/homepage/:id', (req, res) => {
     Articles.find
     });
 
-app.get('/edit/:id',(req,res)=>{
+app.get('/editArticle/:id',(req,res)=>{
     Articles.findById(req.params.id).then(article=>{
-        res.render('edit',{article:article})
+        res.render('editArticle',{article:article})
     })
 
 
@@ -109,21 +109,21 @@ app.put('/homepage/:id',(req,res)=>{
     let id=req.params.id;
    Articles.findByIdAndUpdate(id,
     {title:req.body.title, description:req.body.description, date: Date.now(), markdown:req.body.markdown})
-    .then(()=>{res.redirect(`/show/${id}`)}).catch(err=>{console.log(err)})
+    .then(()=>{res.redirect(`/showArticle/${id}`)}).catch(err=>{console.log(err)})
 })
 
 app.get('/newArticle',(req,res)=>{
     res.render('newArticle',{article: new Articles()})
 })
 
-app.get('/show/:id',async (req,res)=>{
+app.get('/showArticle/:id',async (req,res)=>{
     let id=req.params.id
     let article=await Articles.findById(id)
     let user= await Users.findOne({isLoggedIn:true})
-    res.render('show',{article:article,user:user})
+    res.render('showArticle',{article:article,user:user})
 })
 
-app.post('/show/:id',(req,res)=>{
+app.post('/showArticle/:id',(req,res)=>{
     
 Users.findOne({isLoggedIn:true}).then( (user)=>{
     let id=req.params.id
@@ -132,7 +132,7 @@ Articles.findByIdAndUpdate(id,
              
 ).then(article=>{
     
-    res.redirect(`/show/${article.id}`)})
+    res.redirect(`/showArticle/${article.id}`)})
 
 }).catch(err=>{console.log(err)})
 
@@ -156,7 +156,7 @@ app.post('/homepage/', async (req,res)=>{
     })
     try {
        article.save().then((savedArticle)=>{
-        res.redirect(`/show/${savedArticle.id}`)
+        res.redirect(`/showArticle/${savedArticle.id}`)
 
        }).catch((err)=>{console.log("save error")})
     }
@@ -178,7 +178,7 @@ else{
    await Articles.findByIdAndUpdate(id,{$pull:{likedBy:user.username}})
  
 }
-    res.redirect(`/show/${id}`)
+    res.redirect(`/showArticle/${id}`)
 })
 
 app.get('/follow/:id/:author/:username',async (req,res)=>{
@@ -199,5 +199,31 @@ app.get('/follow/:id/:author/:username',async (req,res)=>{
 
   }
    
-    res.redirect(`/show/${req.params.id}`)
+    res.redirect(`/showArticle/${req.params.id}`)
+})
+
+app.get('/showUser/:username',async (req,res)=>{
+            let articles=await Articles.find({author:req.params.username})
+            let user=await Users.findOne({username:req.params.username})
+            let loggedInUser= await Users.findOne({isLoggedIn:true})
+            res.render('showUser',{articles:articles,user:user,loggedInUser:loggedInUser})
+        
+})
+
+app.get('/editProfile',async(req,res)=>{
+    
+   let loggedInUser= await Users.findOne({isLoggedIn:true})
+   let articles=await Articles.find({author:loggedInUser.username})
+    res.render('editProfile',{user:loggedInUser,articles:articles})
+})
+
+app.post('/submitProfile',async (req,res)=>{
+    console.log(req.body.photoURL)
+   Users.findOneAndUpdate({isLoggedIn:true},
+        {photoURL:req.body.photoURL,
+        Bio:req.body.Bio
+        }).then((changedUser)=>{
+            res.redirect(`/showUser/${changedUser.username}`)
+         
+        })
 })
