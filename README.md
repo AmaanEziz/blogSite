@@ -10,7 +10,7 @@ Registration
 <img src="./Photos/registration.PNG"><br><br>
 
 Homepage:
-<img src="./Photos/homepage.PNG"><br><br>
+<img src="./Photos/index.PNG"><br><br>
 
 New Article:
 <img src="./Photos/newArticle.PNG"><br><br>
