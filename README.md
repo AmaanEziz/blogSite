@@ -1,6 +1,7 @@
-This full stack blog web site allows users to sign in or create an account and sign in, post new blogs,
-edit/delete their blogs, comment on their own blogs as well as other users' blogs, and more. This project
-uses nodeJS/expressJS for the server side, mongoDB for the database, and regular EJS for the front-end.
+This full stack blog web site allows users to sign in or create an account, post new blogs,
+edit/delete their blogs, comment on their own blogs as well as other users' blogs, follow other
+users, view profile pages, edit their own profile page,and more. This project uses nodeJS/expressJS 
+for the server side, mongoDB for the database, and regular EJS for the front-end.
 
 SignIn:
 <img src="./Photos/SignIn.PNG"><br><br>
@@ -14,15 +15,18 @@ Homepage:
 New Article:
 <img src="./Photos/newArticle.PNG"><br><br>
 
-Required New Article Fields:
-<img src="./Photos/requiredFields.PNG"><br><br>
 
 Edit Article:
 <img src="./Photos/edit.PNG"><br><br>
 
-Read More:
-<img src="./Photos/ReadMore.PNG"><br><br>
+Article Page as Author:
+<img src="./Photos/articlePageAsAuthor.PNG"><br><br>
 
-Comments:
-<img src="./Photos/Comments.PNG"><br><br>
+Article Page as Viewer (non-author)
+<img src="./Photos/articlePageAsViewer.PNG"><br><br>
 
+Profile Page:
+<img src="./Photos/Profile Page.PNG"><br><br>
+
+Edit Profile Page:
+<img src="./Photos/editProfile Page.PNG"><br><br>
