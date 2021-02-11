@@ -10,15 +10,12 @@
 </head>
 <body>
 <div style="float:left;height:100vh;max-width:30vw" class="m-2">
-<img src="<%=user.photoURL%>" width=100 height=100 style="display:inline-block">
-<h2 style="display:inline-block"><%=user.username%>'s Profile</h2>
-    <form action="/submitProfile" method="post">
-    <label for="photoURL">Change Photo</label><br>
-    <input type="text" name="photoURL" id="photoURL" value="<%=user.photoURL%>"><br>
-    <label for="Bio">Change Bio</label><br>
-    <textarea name="Bio" id="Bio" ><%=user.Bio%></textarea><br>
-    <button>Submit Changes</button>
-    </form>
+<img src="<%=user.photoURL%>" width=100 height=100 style="display:inline-block;">
+<h2 style="display:inline-block"><%=user.username%>'s Profile</h2><br>
+<% if(user.username==loggedInUser.username){%>
+    <a href="/editProfile" ><button class="bt btn-primary mt-3">Change Profile</button></a>
+<%}%>
+<div>Bio: <%=user.Bio%></div>
 </div>
 
 <div style="position:absolute;left:30vw"> 

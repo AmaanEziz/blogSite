@@ -19,15 +19,6 @@ mongoose.connect('mongodb://localhost/blog', {
   useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true
 })
 mongoose.set('useFindAndModify', false);
-async function deleteAllArticles(){
-await Articles.deleteMany({})
-await Users.deleteMany({})
-console.log(await Articles.find({}))
-console.log(await Users.find({}))
-}
-
-app.get('/test',(req,res)=>{
-    res.sendFile(path.join(__dirname, "reactviews/src", "index.html"));})
 
 app.get('/',(req,res)=>{
     Users.findOne({isLoggedIn:true},(err,result)=>{
@@ -54,10 +45,19 @@ app.get('/login',(req,res)=>{
 })
 app.get('/homepage',(req,res)=>{
     
-    Articles.find({}).then(articlesDB=>{
-        const articles=articlesDB.map(m=>m);
+    Articles.find({}).then(async (articlesDB)=>{
+        let authors=[];
+        let articles=[]
+        await articlesDB.map(async (article)=>{
+             Users.findOne({username:article.author},(err,result)=>{
+                authors.push(result)
+                articles.push(article)
+             })
+            
+        })
+
         Users.findOne({isLoggedIn:true},(err,user)=>{
-            res.render('homepage',{articles:articles,user:user})
+            res.render('homepage',{articles:articles,loggedInUser:user,authors:authors})
         }).catch(err=>{res.redirect('/login')})
     }).catch(err=>{res.redirect('/login')})
     
@@ -218,7 +218,7 @@ app.get('/editProfile',async(req,res)=>{
 })
 
 app.post('/submitProfile',async (req,res)=>{
-    console.log(req.body.photoURL)
+    
    Users.findOneAndUpdate({isLoggedIn:true},
         {photoURL:req.body.photoURL,
         Bio:req.body.Bio
